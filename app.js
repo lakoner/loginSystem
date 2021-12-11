@@ -21,7 +21,7 @@ const { Server } = require("socket.io");
 const io = new Server(server);
 
 app.get('/websocket_simple_chat_test', (req, res) => {  
-    res.sendFile(__dirname + '/views/websocket-test.html');
+    res.sendFile(__dirname + '/views/websocket-chat-test.html');
 });
 
 io.on('connection', (socket) => {  
