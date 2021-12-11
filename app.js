@@ -17,6 +17,26 @@ const settingsRoutes = require('./routes/settingsRoutes')
 const app = express();
 const server = http.createServer(app);
 
+const { Server } = require("socket.io");
+const io = new Server(server);
+
+app.get('/websocket_simple_chat_test', (req, res) => {  
+    res.sendFile(__dirname + '/views/websocket-test.html');
+});
+
+io.on('connection', (socket) => {  
+    socket.broadcast.emit('user connected');
+
+    socket.on('chat message', msg => {
+        //io.emit('chat message', msg);
+        socket.broadcast.emit('chat message', msg);
+    });
+
+    socket.on('disconnect', () => {    
+        socket.broadcast.emit('user disconnected');
+    });
+});
+
 init()
 
 function init() {
