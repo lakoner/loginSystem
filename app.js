@@ -18,21 +18,15 @@ const app = express();
 const server = http.createServer(app);
 
 // Sockets requires
-//const socketIo = require("socket.io");
+const socketIo = require("socket.io");
 const fs = require("fs");
 
-//const io = socketIo(server);
+const io = socketIo(server);
+const clients = {};
 
 // Sockets End
 
-const { Server } = require("socket.io");
-const { response } = require('express')
-const io = new Server(server);
-
 init()
-
-const rooms = { name: {}}
-const clients = {};
 
 var players = {}; // opponent: scoket.id of the opponent, symbol = "X" | "O", socket: player's socket
 var unmatched;
@@ -84,24 +78,6 @@ io.on("connection", function(socket) {
         }
     });
 });
-
-app.get('/rooms', (req, res) => {
-    res.render('rooms', { rooms: rooms })
-})
-
-app.post('/rooms/create_room', (req, res) => {
-    if(rooms[req.body.room] != null) {
-        return res.redirect('/rooms')
-    }
-    rooms[req.body.room] = { users: {}}
-    res.redirect('/rooms/'+ req.body.room)
-    // Send message that new room was created
-    io.emit('room-created', req.body.room)
-})
-
-app.get('rooms/:room', (req, res) => {
-    res.render('room', { roomName: req.params.room })
-})
 
 function init() {
     app.use(bodyParser.urlencoded({extended: false}));
