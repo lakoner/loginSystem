@@ -57,7 +57,6 @@ io.on("connection", function(socket) {
         });
     }
 
-
     // Event for when any player makes a move
     socket.on("make.move", function(data) {
         if (!opponentOf(socket)) {
